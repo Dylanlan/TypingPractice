@@ -72,6 +72,7 @@ namespace TypingPractice
 				this.highscoreQWERTY = highscores[0];
 				this.highscoreDVORAK = highscores[1];
 			}
+
 			this.bestQwertyWPM.Text = this.highscoreQWERTY.ToString();
 			this.bestDvorakWPM.Text = this.highscoreDVORAK.ToString();
 		}
@@ -183,11 +184,6 @@ namespace TypingPractice
 			}
 		}
 
-		private void finishRun()
-		{
-
-		}
-
 		private List<int> readHighscore()
 		{
 			List<int> nums = new List<int>();
@@ -209,9 +205,9 @@ namespace TypingPractice
 			{
 				if (reader != null) reader.Dispose();
 			}
+
 			return nums;
 		}
-
 
 		private void newLine()
 		{
@@ -274,6 +270,7 @@ namespace TypingPractice
 				this.updateStats();
 				return;
 			}
+
 			if (this.inputText.Text.Length > 1 && this.inputText.Text.Last().Equals(" ") &&
 				this.inputText.Text[this.inputText.Text.Length - 2].Equals(" "))
 			{
@@ -332,18 +329,19 @@ namespace TypingPractice
 			{
 				this.inputText.Rtf = this.oldText.Rtf;
 			}
+
 			this.updateStats();
 		}
 
 		private void makeErrorsRed()
 		{
 			this.errorColoring = true;
-
 			int numWords = this.currentTypedWords.Count;
 			if (numWords == 0)
 			{
 				return;
 			}
+
 			var currentWord = this.currentTypedWords[numWords - 1];
 			var correctWord = this.currentCorrectWords[numWords - 1];
 
@@ -352,15 +350,12 @@ namespace TypingPractice
 			bool makeRed = false;
 			if (index > correctWord.Length - 1)
 			{
-				//this.debugTextBox.Text += "WAS TOO LONG!";
 				makeRed = true;
 			}
 			else if (currentWord.Value[index] != correctWord.Value[index])
 			{
-				//this.debugTextBox.Text += "WAS NOT LETTER";
 				makeRed = true;
 			}
-			//this.debugTextBox.Text += "makeRed is " + makeRed.ToString();
 
 			Color toColor = Color.Black;
 			if (makeRed)
@@ -368,12 +363,12 @@ namespace TypingPractice
 				toColor = Color.Red;
 			}
 
-
 			int lastIndex = this.inputText.Text.Length - 1;
 			while (this.inputText.Text[lastIndex] == ' ' && lastIndex >= 0)
 			{
 				lastIndex--;
 			}
+
 			inputText.Select(lastIndex, 1);
 			inputText.SelectionColor = toColor;
 			inputText.SelectionStart = inputText.Text.Length;
@@ -467,6 +462,7 @@ namespace TypingPractice
 					MessageBox.Show("New Highscore!");
 				}
 			}
+
 			this.displayedText.Text = string.Empty;
 			this.inputText.Text = string.Empty;
 			this.inputText.SelectionStart = this.inputText.Text.Length;
@@ -515,6 +511,7 @@ namespace TypingPractice
 				}
 				sentence += word;
 			}
+
 			sentence += ".";
 			return sentence;
 		}
@@ -579,8 +576,8 @@ namespace TypingPractice
 					char letter = getRandomLetter();
 					sentence += letter.ToString();
 				}
-				
 			}
+
 			sentence += ".";
 			return sentence;
 		}
