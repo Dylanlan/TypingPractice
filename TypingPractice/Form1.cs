@@ -33,7 +33,7 @@ namespace TypingPractice
         private string highscorePath = "..\\..\\..\\Highscores\\"; // Path of the high score file
 		private string highscoreFile = "highscores.txt"; // Name of the high score file
 		private string wordListpath = "..\\..\\..\\WordLists\\"; // Path of the word list file
-		private string wordListfile = "google.txt"; // Name of the word list file
+		private string wordListfile = "wordlist.txt"; // Name of the word list file
 		private int highscoreQWERTY = 0; // Current high score for QWERTY words per minute
 		private int highscoreDVORAK = 0; // Current high score for Dvorak words per minute
 		private bool errorColoring = false; // If the input box is currently being colored for errors
