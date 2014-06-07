@@ -16,29 +16,32 @@ namespace TypingPractice
 {
 	public partial class Form1 : Form
 	{
-		private DateTime startTime;
-		private double elapsedSeconds;
-		private RichTextBox oldText = new RichTextBox();
-		private int numMins;
-		private bool running;
-		private List<string> correctStrings = new List<string>();
-		private List<string> typedStrings = new List<string>();
-		private string currentCorrectLine;
-		private MatchCollection currentCorrectWords;
-		private MatchCollection currentTypedWords;
-		private int totalWords;
-		private int totalErrorWords;
-		private Color nextScreenReadyColor = Color.LimeGreen;
-		private Random random;
-		private string highscorePath = "D:\\Dylan\\Projects\\C#\\TypingPractice\\TypingPractice\\Highscores\\";
-		private string highscoreFile = "highscores.txt";
-		private string wordListpath = "D:\\Dylan\\Projects\\C#\\TypingPractice\\TypingPractice\\WordLists\\";
-		private string wordListfile = "google.txt";
-		private int highscoreQWERTY = 0;
-		private int highscoreDVORAK = 0;
-		private bool errorColoring = false;
-		private List<string> wordList = new List<string>();
+		private DateTime startTime; // The time the user clicks start
+		private double elapsedSeconds; // Number of seconds since user clicked start
+		private RichTextBox oldText = new RichTextBox(); // To revert recently typed character
+		private int numMins; // Number of minutes user chose to type for
+		private bool running; // Whether or not a typing session is currently occurring
+		private List<string> correctStrings = new List<string>(); // List of all correct strings to type during a session
+		private List<string> typedStrings = new List<string>(); // List of all strings that were typed during a session
+		private string currentCorrectLine; // The current line that the user should be trying to type
+		private MatchCollection currentCorrectWords; // The words of the current line to be typed
+		private MatchCollection currentTypedWords; // The words of the current line that the user has typed
+		private int totalWords; // Number of total words of previous sentences for current session
+		private int totalErrorWords; // Number of total errors of previous sentences for current session
+		private Color nextScreenReadyColor = Color.LimeGreen; // Color to signal the user that they have finished a sentence
+		private Random random; // A random generator to be used to generate random sentences
+		private string highscorePath = "D:\\Dylan\\Projects\\C#\\TypingPractice\\TypingPractice\\Highscores\\"; // Path of the high score file
+		private string highscoreFile = "highscores.txt"; // Name of the high score file
+		private string wordListpath = "D:\\Dylan\\Projects\\C#\\TypingPractice\\TypingPractice\\WordLists\\"; // Path of the word list file
+		private string wordListfile = "google.txt"; // Name of the word list file
+		private int highscoreQWERTY = 0; // Current high score for QWERTY words per minute
+		private int highscoreDVORAK = 0; // Current high score for Dvorak words per minute
+		private bool errorColoring = false; // If the input box is currently being colored for errors
+		private List<string> wordList = new List<string>(); // A list of all possible words to generate a sentence from
 
+        /// <summary>
+        /// Initializes the form for typing practice
+        /// </summary>
 		public Form1()
 		{
 			InitializeComponent();
@@ -58,12 +61,18 @@ namespace TypingPractice
 			this.blackenDisplayedText();
 		}
 
+        /// <summary>
+        /// Makes the color of all the displayed text black
+        /// </summary>
 		private void blackenDisplayedText()
 		{
 			this.displayedText.SelectAll();
 			this.displayedText.SelectionColor = Color.Black;
 		}
 
+        /// <summary>
+        /// Reads and displays all the current high scores for typing speed
+        /// </summary>
 		private void showHighscores()
 		{
 			List<int> highscores = this.readHighscore();
@@ -77,6 +86,15 @@ namespace TypingPractice
 			this.bestDvorakWPM.Text = this.highscoreDVORAK.ToString();
 		}
 
+        /// <summary>
+        /// Toggle the displayed keyboard layout depending on which option is picked
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
 		private void layoutPicker_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.layoutPicker.SelectedIndex == 0)
@@ -89,6 +107,16 @@ namespace TypingPractice
 			}
 		}
 
+        /// <summary>
+        /// When the user clicks start, it begins the typing session, resetting various information
+        /// and displaying a sentence to be typed, and starts the timer
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
 		private void buttonStart_Click(object sender, EventArgs e)
 		{
 			if (InputLanguage.CurrentInputLanguage.LayoutName.Equals("US"))
@@ -122,6 +150,15 @@ namespace TypingPractice
 			this.buttonStop.Enabled = true;
 		}
 
+        /// <summary>
+        /// Called in increments of 100 milliseconds to check for timeout, and update timed information
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
 		private void timer1_Tick(object sender, EventArgs e)
 		{
 			this.elapsedSeconds = (double)(DateTime.Now - this.startTime).TotalSeconds;
@@ -135,6 +172,16 @@ namespace TypingPractice
 			}
 		}
 
+        /// <summary>
+        /// Calculates the number of errors given a set of typed words, by comparing the
+        /// sequential words
+        /// </summary>
+        /// <param name="typedWords">
+        /// A match collection of the words that have been typed
+        /// </param>
+        /// <returns>
+        /// The number of errors between the typed words and current correct words
+        /// </returns>
 		private int getErrors(MatchCollection typedWords)
 		{
 			int errors = 0;
@@ -162,6 +209,9 @@ namespace TypingPractice
 			return errors;
 		}
 
+        /// <summary>
+        /// Updates statistics regarding errors and words typed
+        /// </summary>
 		private void updateStats()
 		{
 			this.inputText.SelectionStart = this.inputText.Text.Length;
@@ -184,6 +234,13 @@ namespace TypingPractice
 			}
 		}
 
+        /// <summary>
+        /// Reads the highscore file and returns a list of the 2 highscores, or
+        /// displays a messagebox if there was an exception
+        /// </summary>
+        /// <returns>
+        /// A list of the 2 highscores, the QWERTY highscore first
+        /// </returns>
 		private List<int> readHighscore()
 		{
 			List<int> nums = new List<int>();
@@ -209,6 +266,10 @@ namespace TypingPractice
 			return nums;
 		}
 
+        /// <summary>
+        /// Called when the user has finished a sentence and presses enter, it will
+        /// display a new sentence of words to be typed.
+        /// </summary>
 		private void newLine()
 		{
 			this.currentTypedWords = Regex.Matches(this.inputText.Text, @"[\S]+");
@@ -227,6 +288,17 @@ namespace TypingPractice
 			this.colorNextCharacter();
 		}
 
+        /// <summary>
+        /// Ensures that the cursor is always at the end of the textbox, unless letters are currently
+        /// being colored for errors. This is so the user can't start typing in the middle of their
+        /// sentence on accident, which would cause many problems.
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
 		private void inputText_CursorChanged(object sender, EventArgs e)
 		{
 			if (!this.errorColoring)
@@ -236,6 +308,13 @@ namespace TypingPractice
 			}
 		}
 
+        /// <summary>
+        /// Checks if the user is currently typing the last word, and is typing it too long, or
+        /// is typing spaces after the last word
+        /// </summary>
+        /// <returns>
+        /// True if the user is typing past the last word
+        /// </returns>
 		private bool checkTooLong()
 		{
 			bool tooLong = false;
@@ -256,6 +335,17 @@ namespace TypingPractice
 			return tooLong;
 		}
 
+        /// <summary>
+        /// Called when text in the input text box changes, it ensures the textbox doesn't start with
+        /// whitespace, isn't too long, and it updates the colors of text depending on if it was typed
+        /// correctly or incorrectly
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
 		private void inputText_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.running)
@@ -271,6 +361,7 @@ namespace TypingPractice
 				return;
 			}
 
+            // Supposed to compact ending whitespace? Doesn't work?
 			if (this.inputText.Text.Length > 1 && this.inputText.Text.Last().Equals(" ") &&
 				this.inputText.Text[this.inputText.Text.Length - 2].Equals(" "))
 			{
@@ -333,6 +424,10 @@ namespace TypingPractice
 			this.updateStats();
 		}
 
+        /// <summary>
+        /// Colors the last typed letter red or black depending on if it was
+        /// correct or not
+        /// </summary>
 		private void makeErrorsRed()
 		{
 			this.errorColoring = true;
@@ -376,6 +471,10 @@ namespace TypingPractice
 			this.errorColoring = false;
 		}
 
+        /// <summary>
+        /// Finds the next character that should be typed by the user, and gives it
+        /// a green background
+        /// </summary>
 		private void colorNextCharacter()
 		{
 			displayedText.Select(0, displayedText.Text.Length);
@@ -416,6 +515,9 @@ namespace TypingPractice
 			this.inputText.SelectionStart = this.inputText.Text.Length;
 		}
 
+        /// <summary>
+        /// Calculates the words typed per minute and displays it
+        /// </summary>
 		private void outputWPM()
 		{
 			int totalChars = 0;
@@ -427,13 +529,21 @@ namespace TypingPractice
 
 			totalChars += this.inputText.Text.Length;
 
+            // Standard word lengths are 5 characters, including spaces
 			int wpm = totalChars / 5;
 			int errors = getErrors(this.currentTypedWords);
+
+            // Subtract double the number of error words typed
 			wpm -= (this.totalErrorWords + errors) * 2;
 			wpm = Math.Max(0, wpm);
+            wpm /= (int)this.timePicker.Value;
 			this.wpm.Text = wpm.ToString();
 		}
 
+        /// <summary>
+        /// Called when the timer expires, tries to stop user input, calculates the WPM, and
+        /// updates highscores
+        /// </summary>
 		private void timeUp()
 		{
 			this.timer1.Stop();
@@ -475,6 +585,9 @@ namespace TypingPractice
 			this.layoutPicker.Enabled = true;
 		}
 
+        /// <summary>
+        /// Reads from the word list file to be used to generate random sentences.
+        /// </summary>
 		private void loadWords()
 		{
 			string filePath = this.wordListpath + this.wordListfile;
@@ -498,6 +611,10 @@ namespace TypingPractice
 			}
 		}
 
+        /// <summary>
+        /// Generates a sequence of words from the word list
+        /// </summary>
+        /// <returns></returns>
 		private string getRandomSentence()
 		{
 			string sentence = string.Empty;
@@ -516,13 +633,22 @@ namespace TypingPractice
 			return sentence;
 		}
 
+        /// <summary>
+        /// Picks a random word from the saved word list
+        /// </summary>
+        /// <returns>
+        /// The random word
+        /// </returns>
 		private string getRandomWord()
 		{
-			int index = random.Next(0, this.wordList.Count); // Zero to 25
+			int index = random.Next(0, this.wordList.Count);
 			string word = this.wordList[index];
 			return word;
 		}
 
+        /// <summary>
+        /// Resets all the information associated with a typing session
+        /// </summary>
 		private void resetFields()
 		{
 			this.elapsedSeconds = 0;
@@ -539,6 +665,9 @@ namespace TypingPractice
 			this.oldText.Text = string.Empty;
 		}
 
+        /// <summary>
+        /// Writes the new highscores back to the highscore file
+        /// </summary>
 		private void writeHighscores()
 		{
 			string filePath = this.highscorePath + this.highscoreFile;
@@ -559,58 +688,54 @@ namespace TypingPractice
 			}
 		}
 
-		private string generateRandomSentence()
-		{
-			string sentence = String.Empty;
-			int numWords = random.Next(4, 12);
-			for (int i = 0; i < numWords; i++)
-			{
-				if (i > 0)
-				{
-					sentence += " ";
-				}
+        /// <summary>
+        /// Checks if the user has completed the current sentence, if the back color has been
+        /// changed to green
+        /// </summary>
+        /// <returns>
+        /// True if the user has finished the current sentence, false otherwise
+        /// </returns>
+        private bool isReadyNextLine()
+        {
+            if (this.inputText.BackColor == this.nextScreenReadyColor)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-				int wordLength = random.Next(2, 9);
-				for (int j = 0; j < wordLength; j++)
-				{
-					char letter = getRandomLetter();
-					sentence += letter.ToString();
-				}
-			}
-
-			sentence += ".";
-			return sentence;
-		}
-
-		private char getRandomLetter()
-		{
-			int num = random.Next(0, 26); // Zero to 25
-			char let = (char)('a' + num);
-			return let;
-		}
-
-		private bool isReadyNextLine()
-		{
-			if (this.inputText.BackColor == this.nextScreenReadyColor)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
+        /// <summary>
+        /// Sets the back color of the input box to green to signal to the user that they
+        /// can press enter to get the next sentence.
+        /// </summary>
 		private void setReadyNextLine()
 		{
 			this.inputText.BackColor = this.nextScreenReadyColor;
 		}
 
+        /// <summary>
+        /// Sets the back color of the input box to white to signal to the user that they
+        /// still need to type more to be able to get to the next sentence.
+        /// </summary>
 		private void unsetReadyNextLine()
 		{
 			this.inputText.BackColor = Color.White;
 		}
 
+        /// <summary>
+        /// Called when the user clicks the stop button, displays the stats, but doesn't
+        /// write to a file incase the user tried to cheat, they must complete the full
+        /// time session
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
 		private void buttonStop_Click(object sender, EventArgs e)
 		{
 			this.updateStats();
