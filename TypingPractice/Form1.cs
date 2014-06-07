@@ -30,9 +30,9 @@ namespace TypingPractice
 		private int totalErrorWords; // Number of total errors of previous sentences for current session
 		private Color nextScreenReadyColor = Color.LimeGreen; // Color to signal the user that they have finished a sentence
 		private Random random; // A random generator to be used to generate random sentences
-		private string highscorePath = "D:\\Dylan\\Projects\\C#\\TypingPractice\\TypingPractice\\Highscores\\"; // Path of the high score file
+        private string highscorePath = "..\\..\\..\\Highscores\\"; // Path of the high score file
 		private string highscoreFile = "highscores.txt"; // Name of the high score file
-		private string wordListpath = "D:\\Dylan\\Projects\\C#\\TypingPractice\\TypingPractice\\WordLists\\"; // Path of the word list file
+		private string wordListpath = "..\\..\\..\\WordLists\\"; // Path of the word list file
 		private string wordListfile = "google.txt"; // Name of the word list file
 		private int highscoreQWERTY = 0; // Current high score for QWERTY words per minute
 		private int highscoreDVORAK = 0; // Current high score for Dvorak words per minute
@@ -651,7 +651,16 @@ namespace TypingPractice
 		private string getRandomWord()
 		{
 			int index = random.Next(0, this.wordList.Count);
-			string word = this.wordList[index];
+            string word;
+            if (this.wordList.Count == 0)
+            {
+                word = "empty";
+            }
+            else
+            {
+                word = this.wordList[index];
+            }
+
 			return word;
 		}
 
