@@ -45,6 +45,11 @@ namespace TypingPractice
 		public Form1()
 		{
 			InitializeComponent();
+            StartPosition = FormStartPosition.CenterScreen;
+
+            // Comment this out to use a textbox to debug with
+            this.debugTextBox.Visible = false;
+
 			this.running = false;
 			this.layoutPicker.Items.Add("Dvorak");
 			this.layoutPicker.Items.Add("Qwerty");
@@ -550,26 +555,30 @@ namespace TypingPractice
 			this.running = false;
 			this.inputText.Enabled = false;
 			this.outputWPM();
-			System.Threading.Thread.Sleep(1000);
-			MessageBox.Show("Typing session complete!", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var infoBox = new InfoBox("Typing session complete!", "Finished");
+            infoBox.ShowDialog();
 			int wpmTyped = int.Parse(this.wpm.Text);
 			this.resetFields();
 			if (this.layoutPicker.SelectedIndex == 0)
 			{
 				if (wpmTyped > this.highscoreDVORAK)
 				{
-					this.highscoreDVORAK = wpmTyped;
-					this.writeHighscores();
-					MessageBox.Show("New Highscore!");
+                    var dvorakBox = new InfoBox("You typed " + wpmTyped + " WPM in Dvorak - a new high score!", "Dvorak High Score");
+                    dvorakBox.ShowDialog();
+
+                    this.highscoreDVORAK = wpmTyped;
+                    this.writeHighscores();
 				}
 			}
 			else
 			{
 				if (wpmTyped > this.highscoreQWERTY)
 				{
+                    var qwertyBox = new InfoBox("You typed " + wpmTyped + " WPM in QWERTY - a new high score!", "QWERTY High Score");
+                    qwertyBox.ShowDialog();
+
 					this.highscoreQWERTY = wpmTyped;
 					this.writeHighscores();
-					MessageBox.Show("New Highscore!");
 				}
 			}
 
