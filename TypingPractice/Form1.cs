@@ -770,6 +770,16 @@ namespace TypingPractice
 			this.timeUp();
 		}
 
+        /// <summary>
+        /// Called when the user clicks the word list button. It sets the initial directory and
+        /// filename of the open file dialog, and then displays the dialog
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
         private void buttonWordList_Click(object sender, EventArgs e)
         {
             this.openFileDialog1.InitialDirectory = Path.GetDirectoryName(this.wordListFile);
@@ -777,6 +787,16 @@ namespace TypingPractice
             this.openFileDialog1.ShowDialog();
         }
 
+        /// <summary>
+        /// Called when the user selects a word list file. It saves the file as the default
+        /// word list, and then will load the words in the file.
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             this.wordListFile = this.openFileDialog1.FileName;
@@ -785,6 +805,16 @@ namespace TypingPractice
             this.loadWords();
         }
 
+        /// <summary>
+        /// Displays a message box for the user to confirm they want to reset their QWERTY wpm highscore. It then
+        /// sets the highscore back to 0 and saves it to the highscore file.
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
         private void buttonResetQWERTY_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("QWERTY highscore will be set back to 0.", "Reset QWERTY", MessageBoxButtons.OKCancel);
@@ -796,6 +826,16 @@ namespace TypingPractice
             }
         }
 
+        /// <summary>
+        /// Displays a message box for the user to confirm they want to reset their DVORAK wpm highscore. It then
+        /// sets the highscore back to 0 and saves it to the highscore file.
+        /// </summary>
+        /// <param name="sender">
+        /// The object calling this method
+        /// </param>
+        /// <param name="e">
+        /// Arguments associated with this event
+        /// </param>
         private void buttonResetDVORAK_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("DVORAK highscore will be set back to 0.", "Reset DVORAK", MessageBoxButtons.OKCancel);
