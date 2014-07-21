@@ -11,6 +11,7 @@ using System.Management;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Diagnostics;
+using System.IO;
 
 namespace TypingPractice
 {
@@ -30,10 +31,8 @@ namespace TypingPractice
 		private int totalErrorWords; // Number of total errors of previous sentences for current session
 		private Color nextScreenReadyColor = Color.LimeGreen; // Color to signal the user that they have finished a sentence
 		private Random random; // A random generator to be used to generate random sentences
-        private string highscorePath = "..\\..\\..\\Highscores\\"; // Path of the high score file
-		private string highscoreFile = "highscores.txt"; // Name of the high score file
-		private string wordListpath = "..\\..\\..\\WordLists\\"; // Path of the word list file
-		private string wordListfile = "wordlist.txt"; // Name of the word list file
+        private string highscoreFile = "..\\..\\..\\Highscores\\highscores.txt"; // Name of the high score file
+        private string wordListFile = "..\\..\\..\\..\\WordLists\\wordlist.txt"; // Default word list file
 		private int highscoreQWERTY = 0; // Current high score for QWERTY words per minute
 		private int highscoreDVORAK = 0; // Current high score for Dvorak words per minute
 		private bool errorColoring = false; // If the input box is currently being colored for errors
@@ -46,6 +45,16 @@ namespace TypingPractice
 		{
 			InitializeComponent();
             StartPosition = FormStartPosition.CenterScreen;
+
+            if (Properties.Settings.Default.WordListFile != null && Properties.Settings.Default.WordListFile.Length > 0)
+            {
+                this.wordListFile = Properties.Settings.Default.WordListFile;
+            }
+            else
+            {
+                var absolute_path = Path.Combine(Application.ExecutablePath, this.wordListFile);
+                this.wordListFile = Path.GetFullPath((new Uri(absolute_path)).LocalPath);
+            }
 
             // Comment this out to use a textbox to debug with
             this.debugTextBox.Visible = false;
@@ -249,7 +258,7 @@ namespace TypingPractice
 		private List<int> readHighscore()
 		{
 			List<int> nums = new List<int>();
-			string filePath = this.highscorePath + this.highscoreFile;
+			string filePath = this.highscoreFile;
 			System.IO.StreamReader reader = null;
 			try
 			{
@@ -599,8 +608,9 @@ namespace TypingPractice
         /// </summary>
 		private void loadWords()
 		{
-			string filePath = this.wordListpath + this.wordListfile;
+			string filePath = this.wordListFile;
 			System.IO.StreamReader reader = null;
+            this.wordList.Clear();
 			try
 			{	
 				reader = new System.IO.StreamReader(@filePath);
@@ -688,7 +698,7 @@ namespace TypingPractice
         /// </summary>
 		private void writeHighscores()
 		{
-			string filePath = this.highscorePath + this.highscoreFile;
+			string filePath = this.highscoreFile;
 			System.IO.StreamWriter writer = null;
 			try
 			{
@@ -759,5 +769,20 @@ namespace TypingPractice
 			this.updateStats();
 			this.timeUp();
 		}
+
+        private void buttonWordList_Click(object sender, EventArgs e)
+        {
+            this.openFileDialog1.InitialDirectory = Path.GetDirectoryName(this.wordListFile);
+            this.openFileDialog1.FileName = Path.GetFileName(this.wordListFile);
+            this.openFileDialog1.ShowDialog();
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            this.wordListFile = this.openFileDialog1.FileName;
+            Properties.Settings.Default.WordListFile = this.wordListFile;
+            Properties.Settings.Default.Save();
+            this.loadWords();
+        }
 	}
 }
