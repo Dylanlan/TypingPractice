@@ -784,5 +784,27 @@ namespace TypingPractice
             Properties.Settings.Default.Save();
             this.loadWords();
         }
+
+        private void buttonResetQWERTY_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("QWERTY highscore will be set back to 0.", "Reset QWERTY", MessageBoxButtons.OKCancel);
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                this.highscoreQWERTY = 0;
+                this.bestQwertyWPM.Text = this.highscoreQWERTY.ToString();
+                this.writeHighscores();
+            }
+        }
+
+        private void buttonResetDVORAK_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("DVORAK highscore will be set back to 0.", "Reset DVORAK", MessageBoxButtons.OKCancel);
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                this.highscoreDVORAK = 0;
+                this.bestDvorakWPM.Text = this.highscoreDVORAK.ToString();
+                this.writeHighscores();
+            }
+        }
 	}
 }

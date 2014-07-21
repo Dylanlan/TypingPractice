@@ -55,6 +55,8 @@
             this.buttonStop = new System.Windows.Forms.Button();
             this.buttonWordList = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.buttonResetQWERTY = new System.Windows.Forms.Button();
+            this.buttonResetDVORAK = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.keyboardPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timePicker)).BeginInit();
             this.SuspendLayout();
@@ -258,7 +260,7 @@
             // 
             // debugTextBox
             // 
-            this.debugTextBox.Location = new System.Drawing.Point(248, 202);
+            this.debugTextBox.Location = new System.Drawing.Point(265, 222);
             this.debugTextBox.Name = "debugTextBox";
             this.debugTextBox.Size = new System.Drawing.Size(257, 20);
             this.debugTextBox.TabIndex = 19;
@@ -304,11 +306,33 @@
             this.openFileDialog1.Title = "Word List";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
+            // buttonResetQWERTY
+            // 
+            this.buttonResetQWERTY.Location = new System.Drawing.Point(701, 154);
+            this.buttonResetQWERTY.Name = "buttonResetQWERTY";
+            this.buttonResetQWERTY.Size = new System.Drawing.Size(44, 23);
+            this.buttonResetQWERTY.TabIndex = 23;
+            this.buttonResetQWERTY.Text = "Reset";
+            this.buttonResetQWERTY.UseVisualStyleBackColor = true;
+            this.buttonResetQWERTY.Click += new System.EventHandler(this.buttonResetQWERTY_Click);
+            // 
+            // buttonResetDVORAK
+            // 
+            this.buttonResetDVORAK.Location = new System.Drawing.Point(701, 184);
+            this.buttonResetDVORAK.Name = "buttonResetDVORAK";
+            this.buttonResetDVORAK.Size = new System.Drawing.Size(44, 23);
+            this.buttonResetDVORAK.TabIndex = 24;
+            this.buttonResetDVORAK.Text = "Reset";
+            this.buttonResetDVORAK.UseVisualStyleBackColor = true;
+            this.buttonResetDVORAK.Click += new System.EventHandler(this.buttonResetDVORAK_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(764, 345);
+            this.Controls.Add(this.buttonResetDVORAK);
+            this.Controls.Add(this.buttonResetQWERTY);
             this.Controls.Add(this.buttonWordList);
             this.Controls.Add(this.buttonStop);
             this.Controls.Add(this.displayedText);
@@ -369,6 +393,8 @@
 		private System.Windows.Forms.Button buttonStop;
         private System.Windows.Forms.Button buttonWordList;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button buttonResetQWERTY;
+        private System.Windows.Forms.Button buttonResetDVORAK;
 	}
 }
 
